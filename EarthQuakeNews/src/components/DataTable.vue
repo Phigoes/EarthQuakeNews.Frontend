@@ -9,12 +9,15 @@ import ItemsPerPageDropdown from './ItemsPerPageDropdown.vue';
 
 const searchFilter = ref('');
 const radioFilter = ref('');
-const citiesFilter = ref([]);
+const citiesFilter = ref<string[]>([]);
+
+const sortKey = ref<string | null>(null);
+const sortOrder = ref<'asc' | 'desc'>('asc');
 
 const props = defineProps({
     items: { type: Array<Earthquake>, required: true },
     loading: { type: Boolean, required: true },
-    error: { type: String, required: false, defaut: '' }
+    error: { type: String, required: false, default: '' }
 }) 
 
 const filteredItems = computed(() => {
@@ -22,10 +25,10 @@ const filteredItems = computed(() => {
 
     switch (radioFilter.value) {
         case 'today':
-            items = items.filter(item => new Date(item.earthquakeTime).getUTCDate() === new Date().getUTCDate())
+            items = items.filter(item => new Date(item.earthquakeTime).getUTCDate() === new Date().getUTCDate());
             break;
         case 'past':
-            items = items.filter(item => new Date(item.earthquakeTime).getUTCDate() < new Date().getUTCDate())
+            items = items.filter(item => new Date(item.earthquakeTime).getUTCDate() < new Date().getUTCDate());
             break;
     }
 
@@ -39,40 +42,68 @@ const filteredItems = computed(() => {
             item.place.toLowerCase().includes(searchFilter.value) || item.magnitude.toFixed(2).toString().includes(searchFilter.value));
     }
 
-    currentPage.value = 1;
+    if (sortKey.value) {
+        items = [...items].sort((a, b) => {
+            let valA = a[sortKey.value as keyof Earthquake];
+            let valB = b[sortKey.value as keyof Earthquake];
+
+            if (typeof valA === 'number' && typeof valB === 'number') {
+                return sortOrder.value === 'asc' ? valA - valB : valB - valA;
+            }
+
+            if (typeof valA === 'string' && typeof valB === 'string') {
+                return sortOrder.value === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            }
+
+            return 0;
+        });
+    }
+
     return items;
-})
+});
+
+const sortBy = (key: string) => {
+    if (sortKey.value === key) {
+        if (sortOrder.value === 'asc') {
+            sortOrder.value = 'desc';
+        } else {
+            sortKey.value = null;
+            sortOrder.value = 'asc';
+        }
+    } else {
+        sortKey.value = key;
+        sortOrder.value = 'asc';
+    }
+};
 
 const handleSearch = (search: string) => {
     searchFilter.value = search;
-}
+};
 
 const handleRadioFilter = (filter: string) => {
     radioFilter.value = filter;
-}
+};
 
 const handleCheckboxFilter = (filter: string) => {
     if (citiesFilter.value.includes(filter)) {
         return citiesFilter.value.splice(citiesFilter.value.indexOf(filter), 1);
     }
-
     citiesFilter.value.push(filter);
-}
+};
 
-const currentPage = ref<number>(1)
-const totalItems = computed(() => filteredItems.value.length)
-const itemsPerPage = ref<number>(10)
-
-const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value))
+const currentPage = ref<number>(1);
+const totalItems = computed(() => filteredItems.value.length);
+const itemsPerPage = ref<number>(10);
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
 
 const handlePageChange = (page: number) => {
-    currentPage.value = Math.max(1, Math.min(page, totalPages.value))
-}
+    currentPage.value = Math.max(1, Math.min(page, totalPages.value));
+};
 
 const handleItemsPerChangeChange = (items: number) => {
     itemsPerPage.value = items;
     currentPage.value = 1;
-}
+};
 </script>
 
 <template>
@@ -90,12 +121,24 @@ const handleItemsPerChangeChange = (items: number) => {
         <table class="w-full text-sm text-left text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th class="px-4 py-3">Magnitude</th>
-                    <th class="px-4 py-3">Place</th>
-                    <th class="px-4 py-3">Latitude</th>
-                    <th class="px-4 py-3">Longitude</th>
-                    <th class="px-4 py-3">Km. Depth</th>
-                    <th class="px-4 py-3">Time</th>
+                    <th @click="sortBy('magnitude')" class="px-4 py-3 cursor-pointer">
+                        Magnitude <span v-if="sortKey === 'magnitude'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th @click="sortBy('place')" class="px-4 py-3 cursor-pointer">
+                        Place <span v-if="sortKey === 'place'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th @click="sortBy('latitude')" class="px-4 py-3 cursor-pointer">
+                        Latitude <span v-if="sortKey === 'latitude'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th @click="sortBy('longitude')" class="px-4 py-3 cursor-pointer">
+                        Longitude <span v-if="sortKey === 'longitude'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th @click="sortBy('kmDepth')" class="px-4 py-3 cursor-pointer">
+                        Km. Depth <span v-if="sortKey === 'kmDepth'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th @click="sortBy('earthquakeTime')" class="px-4 py-3 cursor-pointer">
+                        Time <span v-if="sortKey === 'earthquakeTime'">{{ sortOrder === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
                     <th class="px-4 py-3">
                         <span class="sr-only">Actions</span>
                     </th>
@@ -125,7 +168,7 @@ const handleItemsPerChangeChange = (items: number) => {
                     <td class="px-4 py-3">{{ item.kmDepth }} km</td>
                     <td class="px-4 py-3">{{ new Date(item.earthquakeTime).toUTCString() }}</td>
                     <td class="px-4 py-3 flex items-center justify-end">
-                        <a :href="item.url" target="_blank" class="text-indigo-500 hover:underline">Details</a>
+                        <a :href="item.url" target="_blank" class="text-blue-500 hover:underline">Details</a>
                     </td>
                 </tr>
             </tbody>

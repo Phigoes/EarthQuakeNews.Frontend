@@ -13,12 +13,12 @@
                             <span class="font-bold">EarthQuakeNews</span>
                         </a>
                     </div>
-                    <div class="hidden md:flex items-center space-x-1">
+                    <div class="flex items-center space-x-1">
                         <a href="/" class="py-5 px-3 text-gray-700 hover:text-gray-900">Home</a>
                         <a href="/about" class="py-5 px-3 text-gray-700 hover:text-gray-900">About</a>
                     </div>
                 </div>
-                <div class="hidden md:flex items-center space-x-1">
+                <div class="flex items-center space-x-1">
                     <a href="https://github.com/Phigoes" target="_blank" type="button"
                         class="text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-full text-sm px-2 py-2 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 cursor-pointer">
                         <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
