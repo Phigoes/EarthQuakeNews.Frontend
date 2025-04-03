@@ -67,13 +67,11 @@ const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.valu
 
 const handlePageChange = (page: number) => {
     currentPage.value = Math.max(1, Math.min(page, totalPages.value))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const handleItemsPerChangeChange = (items: number) => {
     itemsPerPage.value = items;
     currentPage.value = 1;
-    window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 </script>
 
