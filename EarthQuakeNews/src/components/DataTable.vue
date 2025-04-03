@@ -5,6 +5,7 @@ import { computed, ref } from 'vue';
 import FilterRadios from './FilterRadios.vue';
 import FilterDropdown from './FilterDropdown.vue';
 import Pagination from './Pagination.vue';
+import ItemsPerPageDropdown from './ItemsPerPageDropdown.vue';
 
 const searchFilter = ref('');
 const radioFilter = ref('');
@@ -68,6 +69,12 @@ const handlePageChange = (page: number) => {
     currentPage.value = Math.max(1, Math.min(page, totalPages.value))
     window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+const handleItemsPerChangeChange = (items: number) => {
+    itemsPerPage.value = items;
+    currentPage.value = 1;
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 </script>
 
 <template>
@@ -78,6 +85,9 @@ const handlePageChange = (page: number) => {
                 <FilterRadios @filter="handleRadioFilter" />
                 <FilterDropdown :items="items" @filter="handleCheckboxFilter"/>
             </div>
+        </div>
+        <div>
+            <span class="px-4 font-medium text-gray-900">{{ filteredItems.length }} earthquakes</span>
         </div>
         <table class="w-full text-sm text-left text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -122,11 +132,9 @@ const handlePageChange = (page: number) => {
                 </tr>
             </tbody>
         </table>
-        <Pagination
-        :current-page="currentPage"
-        :total-pages="totalPages"
-        :loading="loading"
-        @page-change="handlePageChange"
-      />
+        <div v-if="totalPages > 1" class="mt-4 mb-2 flex justify-center items-center gap-2">
+            <Pagination :current-page="currentPage" :total-pages="totalPages" :loading="loading" @page-change="handlePageChange"/>
+            <ItemsPerPageDropdown @items-per-page-change="handleItemsPerChangeChange"/>
+        </div>
     </div>
 </template>

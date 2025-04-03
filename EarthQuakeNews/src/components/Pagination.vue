@@ -7,7 +7,7 @@ const props = defineProps({
     loading: { type: Boolean, default: false }
 });
 
-const emit = defineEmits<{ (e: 'pageChange', page: number): void }>();
+const emit = defineEmits(['pageChange']);
 
 const maxVisiblePages = 7;
 
@@ -38,21 +38,23 @@ const buttonClasses = computed(() => ({
 </script>
 
 <template>
-    <div v-if="totalPages > 1" class="mt-4 mb-2 flex justify-center items-center gap-1">
-        <button @click="changePage(1)" :disabled="currentPage === 1 || loading" :class="buttonClasses.normal">
-            <<
-        </button>
-        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1 || loading" :class="buttonClasses.normal">
-            <
-        </button>
-        <button v-for="page in pageNumbers" :key="page" @click="changePage(page)" :disabled="loading" :class="[buttonClasses.normal, currentPage === page ? buttonClasses.actived : '']">
-            {{ page }}
-        </button>
-        <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages || loading" :class="buttonClasses.normal">
-            >
-        </button>
-        <button @click="changePage(totalPages)" :disabled="currentPage === totalPages || loading" :class="buttonClasses.normal">
-            >>
-        </button>
-    </div>
+    <button @click="changePage(1)" :disabled="currentPage === 1 || loading" :class="buttonClasses.normal">
+        <<
+    </button>
+    <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1 || loading" :class="buttonClasses.normal">
+        <
+    </button>
+    <button v-for="page in pageNumbers" :key="page" @click="changePage(page)" :disabled="loading" :class="[buttonClasses.normal, currentPage === page ? buttonClasses.actived : '']">
+        {{ page }}
+    </button>
+    <span>...</span>
+    <button @click="changePage(totalPages)" :disabled="currentPage === totalPages || loading" :class="buttonClasses.normal">
+        {{ totalPages }}
+    </button>
+    <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages || loading" :class="buttonClasses.normal">
+        >
+    </button>
+    <button @click="changePage(totalPages)" :disabled="currentPage === totalPages || loading" :class="buttonClasses.normal">
+        >>
+    </button>
 </template>
