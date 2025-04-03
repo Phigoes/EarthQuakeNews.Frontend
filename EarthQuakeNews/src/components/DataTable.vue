@@ -4,6 +4,7 @@ import SearchForm from './SearchForm.vue';
 import { computed, ref } from 'vue';
 import FilterRadios from './FilterRadios.vue';
 import FilterDropdown from './FilterDropdown.vue';
+import Pagination from './Pagination.vue';
 
 const searchFilter = ref('');
 const radioFilter = ref('');
@@ -47,6 +48,7 @@ const filteredItems = computed(() => {
             item.place.toLowerCase().includes(searchFilter.value) || item.magnitude.toFixed(2).toString().includes(searchFilter.value));
     }
 
+    currentPage.value = 1;
     return items;
 })
 
@@ -59,11 +61,23 @@ const handleRadioFilter = (filter: string) => {
 }
 
 const handleCheckboxFilter = (filter: string) => {
+    //console.log(filter);
     if (citiesFilter.value.includes(filter)) {
         return citiesFilter.value.splice(citiesFilter.value.indexOf(filter), 1);
     }
 
     citiesFilter.value.push(filter);
+}
+
+const currentPage = ref<number>(1)
+const totalItems = computed(() => filteredItems.value.length)
+const itemsPerPage = 10
+
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
+
+const handlePageChange = (page: number) => {
+    currentPage.value = Math.max(1, Math.min(page, totalPages.value))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 </script>
 
@@ -106,7 +120,7 @@ const handleCheckboxFilter = (filter: string) => {
                         There are no earthquake data or search criteria found nothing
                     </td>
                 </tr>
-                <tr v-else v-for="item in filteredItems" :key="item.id" class="border-b border-gray-200">
+                <tr v-else v-for="item in filteredItems.slice((currentPage - 1) * itemsPerPage, (itemsPerPage * currentPage))" :key="item.id" class="border-b border-gray-200">
                     <td class="px-4 py-3 font-medium text-gray-900">{{ item.magnitude.toFixed(2) }}</td>
                     <td class="px-4 py-3 font-medium text-gray-900">{{ item.place }}</td>
                     <td class="px-4 py-3">{{ item.latitude.toFixed(3) }}°N</td>
@@ -119,5 +133,11 @@ const handleCheckboxFilter = (filter: string) => {
                 </tr>
             </tbody>
         </table>
+        <Pagination
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        :loading="loading"
+        @page-change="handlePageChange"
+      />
     </div>
 </template>

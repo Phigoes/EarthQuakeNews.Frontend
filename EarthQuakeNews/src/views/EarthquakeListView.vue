@@ -9,17 +9,17 @@ const loading = ref<boolean>(true)
 const error = ref<string | undefined>()
 
 onMounted(async () => {
-  try {
-    loading.value = true
-    error.value = ''
+    try {
+        loading.value = true
+        error.value = ''
 
-    const response = await getEarthquakes();
-    items.value = response;
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : 'An error occurred'
-  } finally {
-    loading.value = false
-  }
+        const response = await getEarthquakes();
+        items.value = response;
+    } catch (e) {
+        error.value = e instanceof Error ? e.message : 'An error occurred'
+    } finally {
+        loading.value = false
+    }
 })
 </script>
 <template>
