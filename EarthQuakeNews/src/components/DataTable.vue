@@ -60,9 +60,9 @@ const handleCheckboxFilter = (filter: string) => {
 
 const currentPage = ref<number>(1)
 const totalItems = computed(() => filteredItems.value.length)
-const itemsPerPage = 10
+const itemsPerPage = ref<number>(10)
 
-const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage))
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value))
 
 const handlePageChange = (page: number) => {
     currentPage.value = Math.max(1, Math.min(page, totalPages.value))
