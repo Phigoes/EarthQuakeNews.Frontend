@@ -76,7 +76,7 @@ const handleItemsPerChangeChange = (items: number) => {
 </script>
 
 <template>
-    <div class="bg-white relative border rounded-lg">
+    <div class="bg-white relative border rounded-lg max-w-7xl m-auto">
         <div class="flex items-center justify-between">
             <SearchForm @search="handleSearch"/>
             <div class="flex items-center justify-end text-sm font-semibold">
@@ -85,7 +85,7 @@ const handleItemsPerChangeChange = (items: number) => {
             </div>
         </div>
         <div>
-            <span class="px-4 font-medium text-gray-900">{{ filteredItems.length }} earthquakes</span>
+            <span class="px-4 font-medium text-gray-600">Total: {{ filteredItems.length }} earthquake(s)</span>
         </div>
         <table class="w-full text-sm text-left text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
