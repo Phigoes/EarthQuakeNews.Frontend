@@ -11,19 +11,9 @@ const radioFilter = ref('');
 const citiesFilter = ref([]);
 
 const props = defineProps({
-    items: {
-        type: Array<Earthquake>,
-        required: true
-    },
-    loading: {
-        type: Boolean,
-        required: true
-    },
-    error: {
-        type: String,
-        required: false,
-        defaut: ''
-    }
+    items: { type: Array<Earthquake>, required: true },
+    loading: { type: Boolean, required: true },
+    error: { type: String, required: false, defaut: '' }
 }) 
 
 const filteredItems = computed(() => {
@@ -61,7 +51,6 @@ const handleRadioFilter = (filter: string) => {
 }
 
 const handleCheckboxFilter = (filter: string) => {
-    //console.log(filter);
     if (citiesFilter.value.includes(filter)) {
         return citiesFilter.value.splice(citiesFilter.value.indexOf(filter), 1);
     }

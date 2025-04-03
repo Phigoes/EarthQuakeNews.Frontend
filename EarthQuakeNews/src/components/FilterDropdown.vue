@@ -7,10 +7,7 @@ const selectedLocations = ref<string[]>([])
 const emit = defineEmits(['filter']);
 
 const props = defineProps({
-    items: {
-        type: Array<Earthquake>,
-        required: true
-    }
+    items: { type: Array<Earthquake>, required: true }
 });
 
 const locations = computed(() => {

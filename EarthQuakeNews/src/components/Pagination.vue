@@ -42,25 +42,21 @@ const buttonClasses = computed(() => ({
         <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1 || loading" :class="buttonClasses.normal">
             Previous
         </button>
-
         <template v-if="pageNumbers[0] > 1">
             <button @click="changePage(1)" :disabled="loading" :class="buttonClasses.normal">
                 1
             </button>
             <span v-if="pageNumbers[0] > 2" class="px-2">...</span>
         </template>
-
         <button v-for="page in pageNumbers" :key="page" @click="changePage(page)" :disabled="loading" :class="[buttonClasses.normal, currentPage === page ? buttonClasses.actived : '']">
             {{ page }}
         </button>
-
         <template v-if="pageNumbers[pageNumbers.length - 1] < totalPages">
             <span v-if="pageNumbers[pageNumbers.length - 1] < totalPages - 1" class="px-2">...</span>
             <button @click="changePage(totalPages)" :disabled="loading" :class="buttonClasses.normal">
                 {{ totalPages }}
             </button>
         </template>
-
         <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages || loading" :class="buttonClasses.normal">
             Next
         </button>
