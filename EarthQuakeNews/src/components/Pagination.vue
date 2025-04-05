@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 const props = defineProps({
     currentPage: { type: Number, required: true },
@@ -8,14 +8,31 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['pageChange']);
+const windowWidth = ref(window.innerWidth);
 
-const maxVisiblePages = 7;
+const updateWindowSize = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    window.addEventListener('resize', updateWindowSize);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateWindowSize);
+});
+
+const maxVisiblePages = computed(() => {
+    if (windowWidth.value < 640) return 2;
+    if (windowWidth.value < 1024) return 4;
+    return 7;
+});
 
 const pageNumbers = computed(() => {
-    if (props.totalPages <= maxVisiblePages) return Array.from({ length: props.totalPages }, (_, i) => i + 1);
+    if (props.totalPages <= maxVisiblePages.value) return Array.from({ length: props.totalPages }, (_, i) => i + 1);
 
-    const startPage = Math.max(1, props.currentPage - Math.floor(maxVisiblePages / 2));
-    const endPage = Math.min(props.totalPages, startPage + maxVisiblePages - 1);
+    const startPage = Math.max(1, props.currentPage - Math.floor(maxVisiblePages.value / 2));
+    const endPage = Math.min(props.totalPages, startPage + maxVisiblePages.value - 1);
     
     const pages = [];
     for (let i = startPage; i <= endPage; i++) pages.push(i);
@@ -30,7 +47,7 @@ const changePage = (page: number) => {
 };
 
 const buttonClasses = computed(() => ({
-    normal: `px-6 sm:px-4 py-1 sm:py-2 text-sm sm:text-base rounded-lg border
+    normal: `px-3 sm:px-3 py-1 sm:py-1 text-sm sm:text-base rounded-lg border
             border-black-200 cursor-pointer hover:bg-black-50 disabled:opacity-50
             disabled:hover:bg-transparent disabled:cursor-not-allowed`,
     actived: `bg-gray-700 cursor-pointer text-white border-gray-700`
