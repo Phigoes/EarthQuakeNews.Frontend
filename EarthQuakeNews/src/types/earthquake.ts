@@ -6,6 +6,6 @@ export type Earthquake = {
     longitude: number
     kmDepth: number
     earthquakeTime: string
-    code: string
+    featureId: string
     url: string
 }
