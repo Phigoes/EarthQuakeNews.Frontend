@@ -23,7 +23,5 @@ onMounted(async () => {
 })
 </script>
 <template>
-    <div class="p-8 bg-gray-100 min-h-screen">
-        <DataTable :items="items" :loading="loading" :error="error"/>
-  </div>
+    <DataTable :items="items" :loading="loading" :error="error"/>
 </template>
