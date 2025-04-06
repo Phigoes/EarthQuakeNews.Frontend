@@ -1,6 +1,6 @@
 # **Earthquake News** 
 
-**Earthquake News** is a web application that displays real-time earthquake data from various locations. Users can filter, search, and sort earthquake events by magnitude, location, depth, and time.
+**EarthquakeNews** is a web application that displays real-time earthquake data from various locations. Users can filter, search, and sort earthquake events by magnitude, location, depth, and time.
 
 ## **Features** 
 - 📌 View earthquake data in an interactive table  
