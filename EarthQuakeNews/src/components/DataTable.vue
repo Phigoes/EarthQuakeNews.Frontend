@@ -6,10 +6,12 @@ import FilterRadios from './FilterRadios.vue';
 import FilterDropdown from './FilterDropdown.vue';
 import Pagination from './Pagination.vue';
 import ItemsPerPageDropdown from './ItemsPerPageDropdown.vue';
+import FilterDate from './FilterDate.vue';
 
 const searchFilter = ref('');
 const radioFilter = ref('');
 const citiesFilter = ref<string[]>([]);
+const dateFilter = ref<Date | null>();
 
 const sortKey = ref<string | null>(null);
 const sortOrder = ref<'asc' | 'desc'>('asc');
@@ -40,6 +42,10 @@ const filteredItems = computed(() => {
     if (searchFilter.value !== '') {
         items = items.filter(item =>
             item.place.toLowerCase().includes(searchFilter.value.toLowerCase()) || item.magnitude.toFixed(2).toString().includes(searchFilter.value));
+    }
+
+    if (dateFilter.value) {
+        items = items.filter(item => new Date(item.earthquakeTime).getUTCDate() === dateFilter.value?.getDate() );
     }
 
     if (sortKey.value) {
@@ -94,6 +100,11 @@ const handleCheckboxFilter = (filter: string) => {
     currentPage.value = 1;
 };
 
+const handleDateFilter = (filter: Date) => {
+    dateFilter.value = filter;
+    currentPage.value = 1;
+}
+
 const currentPage = ref<number>(1);
 const totalItems = computed(() => filteredItems.value.length);
 const itemsPerPage = ref<number>(10);
@@ -113,7 +124,10 @@ const handleItemsPerChangeChange = (items: number) => {
     <div class="p-8 bg-gray-100 min-h-screen">
         <div class="bg-white relative border rounded-lg max-w-7xl m-auto">
             <div class="flex items-center justify-between flex-wrap gap-4 p-4">
-                <SearchForm @search="handleSearch" />
+                <div class="flex">
+                    <SearchForm @search="handleSearch" />
+                    <FilterDate @filter="handleDateFilter"/>
+                </div>
                 <div class="flex items-center justify-end text-sm font-semibold">
                     <FilterRadios @filter="handleRadioFilter" />
                     <FilterDropdown :items="items" @filter="handleCheckboxFilter" />
