@@ -39,7 +39,7 @@ const filteredItems = computed(() => {
 
     if (searchFilter.value !== '') {
         items = items.filter(item =>
-            item.place.toLowerCase().includes(searchFilter.value) || item.magnitude.toFixed(2).toString().includes(searchFilter.value));
+            item.place.toLowerCase().includes(searchFilter.value.toLowerCase()) || item.magnitude.toFixed(2).toString().includes(searchFilter.value));
     }
 
     if (sortKey.value) {
@@ -78,10 +78,12 @@ const sortBy = (key: string) => {
 
 const handleSearch = (search: string) => {
     searchFilter.value = search;
+    currentPage.value = 1;
 };
 
 const handleRadioFilter = (filter: string) => {
     radioFilter.value = filter;
+    currentPage.value = 1;
 };
 
 const handleCheckboxFilter = (filter: string) => {
@@ -89,6 +91,7 @@ const handleCheckboxFilter = (filter: string) => {
         return citiesFilter.value.splice(citiesFilter.value.indexOf(filter), 1);
     }
     citiesFilter.value.push(filter);
+    currentPage.value = 1;
 };
 
 const currentPage = ref<number>(1);
