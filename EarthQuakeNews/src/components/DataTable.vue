@@ -120,7 +120,7 @@ const handleItemsPerChangeChange = (items: number) => {
                 <span class="px-4 font-medium text-gray-600">Total: {{ filteredItems.length }} earthquake(s)</span>
             </div>
             <div class="overflow-x-auto">
-                <table class="min-w-full text-sm text-left text-gray-500">
+                <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
                             <th @click="sortBy('magnitude')" class="px-4 py-3 cursor-pointer whitespace-nowrap">
