@@ -10,7 +10,7 @@
 - 📅 Filter by date
 - 🌐 External links to more earthquake details  
 
-## **Technologies Used** 🛠
+## **Technologies Used** 
 - **Vue.js 3** + **Vite** (Frontend framework)  
 - **TailwindCSS** (Styling)  
 - **Axios** (API requests)  
@@ -20,7 +20,7 @@
 ## **Screen** 
 ![image](https://github.com/user-attachments/assets/7b1234cc-f718-43b8-8009-15f5f630ad86)
 
-## **Installation & Setup** 🏗
+## **Installation & Setup** 
 
 ### **1️⃣ Clone the repository**
 ```sh
