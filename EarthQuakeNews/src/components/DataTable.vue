@@ -196,7 +196,7 @@ const handleItemsPerChangeChange = (items: number) => {
                     </tbody>
                 </table>
             </div>
-            <div v-if="totalPages > 1" class="mt-4 mb-2 flex justify-center items-center gap-1">
+            <div class="mt-4 mb-2 flex justify-center items-center gap-1">
                 <Pagination :current-page="currentPage" :total-pages="totalPages" :loading="loading"
                     @page-change="handlePageChange" />
                 <ItemsPerPageDropdown :items-per-page="itemsPerPage"
